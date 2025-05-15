@@ -1,4 +1,5 @@
 let total = 0;
+let currentDate = new Date();
 
 function addEntry() {
   const item = document.getElementById('item').value;
@@ -17,10 +18,25 @@ function addEntry() {
   document.getElementById('calories').value = '';
 }
 
-function showToday() {
-  const now = new Date();
-  const today = now.toLocaleDateString('de-DE', {
+function formatDate(date) {
+  return date.toLocaleDateString('de-DE', {
     weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
-  document.getElementById('today').textContent = today;
+}
+
+function showToday() {
+  currentDate = new Date();
+  updateDateDisplay();
+}
+
+function changeDay(direction) {
+  currentDate.setDate(currentDate.getDate() + direction);
+  updateDateDisplay();
+}
+
+function updateDateDisplay() {
+  document.getElementById('today').textContent = formatDate(currentDate);
+
+  // Optional: Lade hier tagesabhängige Einträge
+  // Für diese Demo bleibt die Liste gleich.
 }
