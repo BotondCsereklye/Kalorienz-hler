@@ -1,116 +1,30 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kalorienzähler</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
-            padding: 20px;
-            max-width: 500px;
-            margin: auto;
-        }
-        h1 {
-            text-align: center;
-        }
-        input, button {
-            padding: 10px;
-            font-size: 16px;
-            margin: 5px 0;
-            width: 100%;
-            box-sizing: border-box;
-        }
-        #kalorienListe {
-            margin-top: 20px;
-        }
-        .eintrag {
-            background-color: #fff;
-            padding: 10px;
-            margin-bottom: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        #gesamt {
-            font-weight: bold;
-            font-size: 18px;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .nav-buttons {
-            display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kalorienzähler</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <h1>Kalorienzähler</h1>
-    <div class="nav-buttons">
-        <button onclick="tagWechseln(-1)">◀ Vorheriger Tag</button>
-        <button onclick="tagWechseln(1)">Nächster Tag ▶</button>
+  <div class="container">
+    <h1 class="fade-in">Kalorienzähler</h1>
+    
+    <div class="input-section slide-in">
+      <input type="text" id="item" placeholder="Was hast du gegessen?" />
+      <input type="number" id="calories" placeholder="Kalorien" />
+      <button onclick="addEntry()">Hinzufügen</button>
     </div>
-    <div id="datumAnzeige" style="text-align:center; margin: 10px 0; font-weight: bold;"></div>
-    <input type="number" id="kalorienInput" placeholder="Kalorien eingeben">
-    <button onclick="kalorienHinzufuegen()">Hinzufügen</button>
 
-    <div id="kalorienListe"></div>
-    <div id="gesamt">Gesamt: 0 kcal</div>
+    <div class="button-row">
+      <button class="date-button" onclick="showToday()">Heute</button>
+      <span id="today"></span>
+    </div>
 
-    <script>
-        let aktuellesDatum = new Date();
-        aktuellesDatum.setHours(0,0,0,0);
+    <ul id="entries"></ul>
+    <div id="total">Gesamt: 0 kcal</div>
+  </div>
 
-        function formatDatum(date) {
-            return date.toISOString().split('T')[0];
-        }
-
-        function ladeDaten() {
-            const datumKey = formatDatum(aktuellesDatum);
-            const daten = JSON.parse(localStorage.getItem(datumKey)) || [];
-
-            let gesamtKalorien = 0;
-            document.getElementById("kalorienListe").innerHTML = "";
-            daten.forEach(wert => {
-                gesamtKalorien += wert;
-                const eintrag = document.createElement("div");
-                eintrag.className = "eintrag";
-                eintrag.textContent = `${wert} kcal hinzugefügt`;
-                document.getElementById("kalorienListe").prepend(eintrag);
-            });
-
-            document.getElementById("gesamt").textContent = `Gesamt: ${gesamtKalorien} kcal`;
-            document.getElementById("datumAnzeige").textContent = `Datum: ${formatDatum(aktuellesDatum)}`;
-        }
-
-        function speichereEintrag(wert) {
-            const datumKey = formatDatum(aktuellesDatum);
-            const daten = JSON.parse(localStorage.getItem(datumKey)) || [];
-            daten.push(wert);
-            localStorage.setItem(datumKey, JSON.stringify(daten));
-        }
-
-        function kalorienHinzufuegen() {
-            const input = document.getElementById("kalorienInput");
-            const wert = parseInt(input.value);
-            if (!isNaN(wert) && wert > 0) {
-                speichereEintrag(wert);
-                ladeDaten();
-                input.value = "";
-            } else {
-                alert("Bitte eine gültige Kalorienzahl eingeben.");
-            }
-        }
-
-        function tagWechseln(richtung) {
-            aktuellesDatum.setDate(aktuellesDatum.getDate() + richtung);
-            ladeDaten();
-        }
-
-        // Initiales Laden der Daten
-        ladeDaten();
-    </script>
+  <script src="script.js"></script>
 </body>
 </html>
-
