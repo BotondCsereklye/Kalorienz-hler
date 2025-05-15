@@ -16,8 +16,11 @@
       <button onclick="addEntry()">Hinzufügen</button>
     </div>
 
+    <!-- Navigation für Datum -->
     <div class="button-row">
+      <button class="date-button" onclick="changeDay(-1)">«</button>
       <button class="date-button" onclick="showToday()">Heute</button>
+      <button class="date-button" onclick="changeDay(1)">»</button>
       <span id="today"></span>
     </div>
 
